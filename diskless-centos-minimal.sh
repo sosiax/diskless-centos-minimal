@@ -6,15 +6,21 @@ mkdir -p $ROOTDISK
 cd $ROOTDISK
 #yum group -y install --installroot=$ROOTDISK "Instalación mínima"
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
-yum -y install --releasever=7 --installroot=$ROOTDISK install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal 
-cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repo.d/
+
+#yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
+yum -y install --releasever=7 --installroot=$ROOTDISK install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
+
+read -n1 -r -p "Press any key to continue..." key
+cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repo.d/elrepo.repo
+read -n1 -r -p "Press any key to continue..." key
+
+
 yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
 
-yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
 
 
 # Set the root password in the image
-chroot $ROOTDISK passwd
+echo "root:2dminHPC19" | chroot $ROOTDISK chpasswd
 
 cd $ROOTDISK
 ln -s ./sbin/init ./init
@@ -28,10 +34,14 @@ echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 echo "ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended" >>  $ROOTDISK/etc/rc.local
 
-cd $ROOTDISK
 
+cp $ROOTDISK/boot/vmlinuz-* $(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
+chmod 644 $VMLINUZIMAGE
+
+rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
+
+cd $ROOTDISK
 find | cpio -ocv | gzip -9 > $DISKIMAGE
 chmod 644 $DISKIMAGE
-cp $ROOTDISK/boot/vmlinuz-* $(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
 
-chmod 644 $VMLINUZIMAGE
+
