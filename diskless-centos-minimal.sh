@@ -12,7 +12,7 @@ cd $ROOTDISK
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
-yum -y install --releasever=7 --installroot=$ROOTDISK install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
+yum -y install --releasever=7 --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
 
 # Configuring yum 
 echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
@@ -20,7 +20,7 @@ echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 
 read -n1 -r -p "Press any key to continue..." key
-cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repo.d/elrepo.repo
+cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
 read -n1 -r -p "Press any key to continue..." key
 
 
@@ -45,7 +45,9 @@ echo "ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unat
 cp $ROOTDISK/boot/vmlinuz-* $(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
 chmod 644 $VMLINUZIMAGE
 
+# Cleaning up
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
+rm -fr /var/cache/yum
 
 cd $ROOTDISK
 find | cpio -ocv | gzip -9 > $DISKIMAGE
