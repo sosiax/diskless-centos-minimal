@@ -3,12 +3,21 @@ export ROOTDISK=/var/lib/diskless/centos7-minimal/
 export DISKIMAGE=/root/tmp/diskless-image/diskless.img
 export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
 mkdir -p $ROOTDISK
+
+# Speed up image building -- Atention!
+mount -t tmpfs -o size=4G,nr_inodes=40k tmpfs $ROOTDISK
+
 cd $ROOTDISK
 #yum group -y install --installroot=$ROOTDISK "Instalación mínima"
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
 yum -y install --releasever=7 --installroot=$ROOTDISK install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
+
+# Configuring yum 
+echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
+echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
+
 
 read -n1 -r -p "Press any key to continue..." key
 cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repo.d/elrepo.repo
@@ -29,8 +38,6 @@ cd
 # Enable networking
 echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
 chmod 644 $ROOTDISK/etc/sysconfig/network
-echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
-echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 echo "ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended" >>  $ROOTDISK/etc/rc.local
 
