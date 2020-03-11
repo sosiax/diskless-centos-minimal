@@ -33,7 +33,11 @@ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh
 #read -n1 -r -p "Press any key to continue..." key
 #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
 # Coping rc.local
-cp -f $SCRITP_readlink -f ./DIR/rc.local $ROOTDISK/rc.local
+cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
+mkdir $ROOTDISK/root/.ssh 
+chmod 700 $ROOTDISK/root/.ssh 
+cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
+
 read -n1 -r -p "Press any key to continue..." key
 #yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
 
