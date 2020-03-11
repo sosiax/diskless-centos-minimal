@@ -25,13 +25,11 @@ echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
 echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 
+#Installing kernel-lt
 #read -n1 -r -p "Press any key to continue..." key
-cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
+#cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
 #read -n1 -r -p "Press any key to continue..." key
-
-
 #yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
-
 
 
 # Set the root password in the image
@@ -39,21 +37,27 @@ echo "root:2dminHPC19" | chroot $ROOTDISK chpasswd
 
 cd $ROOTDISK
 ln -s ./sbin/init ./init
-cd
+cd - 
+
+# Updating fstab - TODO : check for cache device 
+echo "192.168.1.133:/var/lib/diskless/centos7/usr        /usr                 nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> $ROOTDISK/etc/fstab
+echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> $ROOTDISK/etc/fstab
 
 # Enable networking
 echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
 chmod 644 $ROOTDISK/etc/sysconfig/network
 
-echo "ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended" >>  $ROOTDISK/etc/rc.local
+# Coping rc.local
+cp -f rc.local $ROOTDISK/rc.local
 
-
-cp $ROOTDISK/boot/vmlinuz-* $(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
-chmod 644 $VMLINUZIMAGE
+# Getting kernel
+cp $ROOTDISK/boot/vmlinuz-* $VMLINUZIMAGE
+chmod 755 $VMLINUZIMAGE
 
 # Cleaning up
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
-rm -fr /var/cache/yum
+rm -fr $ROOTDISK/var/cache/yum
+rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 
 cd $ROOTDISK
 find | cpio -ocv | gzip -9 > $DISKIMAGE
