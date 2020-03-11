@@ -57,7 +57,7 @@ chmod 755 $VMLINUZIMAGE
 
 # Cleaning up
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
-rm -fr $ROOTDISK/var/cache/yum
+rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 
 cd $ROOTDISK
