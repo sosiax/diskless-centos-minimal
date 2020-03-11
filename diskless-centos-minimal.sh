@@ -1,4 +1,5 @@
 #!/bin/sh
+SCRITP_DIR=$(dirname $0)
 export ROOTDISK=/var/lib/diskless/centos7-minimal/
 export DISKIMAGE=/root/tmp/diskless-image/diskless.img
 export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
@@ -48,7 +49,7 @@ echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
 chmod 644 $ROOTDISK/etc/sysconfig/network
 
 # Coping rc.local
-cp -f rc.local $ROOTDISK/rc.local
+cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
 
 # Getting kernel
 cp $ROOTDISK/boot/vmlinuz-* $VMLINUZIMAGE
