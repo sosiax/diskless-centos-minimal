@@ -10,9 +10,6 @@ then
   read -n1 -r -p "Press any key to continue..." key
 fi
 
-echo "$SCRITP_DIR"
-read -n1 -r -p "Press any key to continue..." key
-
 mkdir -p $ROOTDISK
 
 # Speed up image building -- Atention!
