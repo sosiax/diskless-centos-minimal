@@ -13,6 +13,10 @@
 touch /var/lock/subsys/local
 
 #TODO : check for cache device 
-
+dhclient
+mount -a
+loadkeys es
+cd /
+tar xzf /usr/share/icmat/node-etc.tgz
 
 ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended" 

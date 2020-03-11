@@ -30,7 +30,9 @@ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh
 #Installing kernel-lt
 #read -n1 -r -p "Press any key to continue..." key
 #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
-#read -n1 -r -p "Press any key to continue..." key
+# Coping rc.local
+cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
+read -n1 -r -p "Press any key to continue..." key
 #yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
 
 
@@ -49,8 +51,6 @@ echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     
 echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
 chmod 644 $ROOTDISK/etc/sysconfig/network
 
-# Coping rc.local
-cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
 
 # Getting kernel
 cp $ROOTDISK/boot/vmlinuz-* $VMLINUZIMAGE
