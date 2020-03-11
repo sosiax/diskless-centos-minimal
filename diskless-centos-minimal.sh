@@ -25,9 +25,9 @@ echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
 echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 
-read -n1 -r -p "Press any key to continue..." key
+#read -n1 -r -p "Press any key to continue..." key
 cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
-read -n1 -r -p "Press any key to continue..." key
+#read -n1 -r -p "Press any key to continue..." key
 
 
 yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
