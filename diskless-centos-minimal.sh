@@ -21,7 +21,7 @@ cd $ROOTDISK
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
 #yum -y install --releasever=7 --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
-yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient openssh-server openssh-clients nfs-utils vim-minimal util-linux shadow-utils kernel-lt net-tools
+yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient openssh-server openssh-clients nfs-utils vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron
 
 # Configuring yum 
 echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
@@ -33,7 +33,7 @@ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh
 #read -n1 -r -p "Press any key to continue..." key
 #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
 # Coping rc.local
-cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
+cp -f $SCRITP_DIR/rc.local $ROOTDISK/etc/rc.local
 mkdir -p $ROOTDISK/root/.ssh 
 chmod 700 $ROOTDISK/root/.ssh 
 cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
