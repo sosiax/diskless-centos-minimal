@@ -16,7 +16,9 @@ touch /var/lock/subsys/local
 dhclient
 mount -a
 loadkeys es
+
 cd /
 tar xzf /usr/share/icmat/node-etc.tgz
+cd -
 
-ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended" 
+ipa-client-install -force-join -principal admin@ICMAT.ES -w AdminIPA -unattended

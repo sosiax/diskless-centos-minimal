@@ -1,12 +1,17 @@
 #!/bin/sh
-SCRITP_DIR=$(dirname $0)
+SCRITP_DIR=`readlink -f $(dirname $0)`
 export ROOTDISK=/var/lib/diskless/centos7-minimal/
 export DISKIMAGE=/root/tmp/diskless-image/diskless.img
 export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
 
 if mount $ROOTDISK &> /dev/null 
-then echo "!!!! $ROOTDISK already mounted"
+then 
+  echo "!!!! $ROOTDISK already mounted"
+  read -n1 -r -p "Press any key to continue..." key
 fi
+
+echo "$SCRITP_DIR"
+read -n1 -r -p "Press any key to continue..." key
 
 mkdir -p $ROOTDISK
 
@@ -31,7 +36,7 @@ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh
 #read -n1 -r -p "Press any key to continue..." key
 #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
 # Coping rc.local
-cp -f $SCRITP_DIR/rc.local $ROOTDISK/rc.local
+cp -f $SCRITP_readlink -f ./DIR/rc.local $ROOTDISK/rc.local
 read -n1 -r -p "Press any key to continue..." key
 #yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
 
