@@ -2,6 +2,11 @@
 export ROOTDISK=/var/lib/diskless/centos7-minimal/
 export DISKIMAGE=/root/tmp/diskless-image/diskless.img
 export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
+
+if mount $ROOTDISK &> /dev/null 
+then echo "!!!! $ROOTDISK already mounted"
+fi
+
 mkdir -p $ROOTDISK
 
 # Speed up image building -- Atention!
@@ -12,7 +17,8 @@ cd $ROOTDISK
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
-yum -y install --releasever=7 --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
+#yum -y install --releasever=7 --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
+yum -y install --releasever=7 --enablerepo=elrepo-kernel --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient openssh-server openssh-clients nfs-utils vim-minimal util-linux shadow-utils kernel-lt
 
 # Configuring yum 
 echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
