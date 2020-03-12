@@ -10,7 +10,7 @@ then
   echo "!!!! $ROOTDISK already mounted"
   read -n1 -r -p "Press any key to continue..." key
 fi
-rsync -rAa $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum &> $LOG
+rsync -rAa $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum 1> $LOG
 
 mkdir -p $ROOTDISK
 
@@ -27,7 +27,7 @@ echo -n "Installing system ..... "
 yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
 basesystem filesystem bash passwd \
 dhclient openssh-server openssh-clients nfs-utils yum \
-vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &> $LOG
+vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &>> $LOG
 echo "Done"
 
 # Configuring yum 
@@ -62,7 +62,7 @@ rm -fr $ROOTDISK/usr/share/doc
 
 # Keeping cache files
 mkdir -p $SCRITP_DIR/cache/yum
-rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum &> $LOG
+rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum 1>> $LOG
 rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 
 
@@ -70,7 +70,7 @@ rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 read -n1 -r -p "Press any key to continue..." key
 
 cd $ROOTDISK 
-find | cpio -ocv | gzip -9 > $DISKIMAGE &> $LOG
+find | cpio -ocv | gzip -9 > $DISKIMAGE 2>> $LOG
 chmod 644 $DISKIMAGE
 
 
