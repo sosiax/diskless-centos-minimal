@@ -10,7 +10,7 @@
 # Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
 # that this script will be executed during boot.
 
-touch /var/lock/subsys/local
+touch /var/lock/subsys/diskless-boot
 
 #TODO : check for cache device 
 dhclient
@@ -21,4 +21,4 @@ cd /
 tar xzf /usr/share/icmat/node-etc.tgz
 cd -
 
-ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA --unattended
+#ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA --unattended

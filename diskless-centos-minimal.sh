@@ -20,6 +20,7 @@ mount -t tmpfs -o size=4G,nr_inodes=40k tmpfs $ROOTDISK
 
 cd $ROOTDISK
 #yum group -y install --installroot=$ROOTDISK "Instalación mínima"
+
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
@@ -37,7 +38,8 @@ echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
 # coping script files
 cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
-cp -f $SCRITP_DIR/rc.local $ROOTDISK/etc/rc.local
+cp -f $SCRITP_DIR/diskless-boot.sh $ROOTDISK/root/
+cp -f $SCRITP_DIR/diskless-boot.service $ROOTDISK/usr/lib/systemd/system/ 
 cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
 chmod +x $ROOTDISK/root/chroot_cmds.sh 
 

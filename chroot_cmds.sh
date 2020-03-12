@@ -1,9 +1,10 @@
 #!/bin/sh
 ln -s ./sbin/init ./init
 
-# forcing rc-local
-chmod +x /etc/rc.d/rc.local
-systemctl enable rc-local
+# Enabling diskless-
+chmod +x /root/diskless-boot.sh
+systemctl enable diskless-boot
+
 
 # Updating fstab - TODO : check for cache device 
 echo "192.168.1.133:/var/lib/diskless/centos7/usr        /usr                 nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> /etc/fstab
