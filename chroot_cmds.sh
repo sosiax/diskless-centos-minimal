@@ -11,7 +11,7 @@ echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     
 
 # reducing locale
 localedef --list-archive | grep -v -i ^en| xargs localedef --delete-from-archive
-mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+#mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
 build-locale-archive
 
 # Set the root password in the image

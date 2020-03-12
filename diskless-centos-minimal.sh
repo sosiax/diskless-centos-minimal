@@ -58,17 +58,19 @@ rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 # Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
 rm -fr $ROOTDISK/usr/share/man/
+rm -fr $ROOTDISK/usr/share/doc
+
 # Keeping cache files
 mkdir -p $SCRITP_DIR/cache/yum
-rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum $> $LOG
+rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum &> $LOG
 rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 
 
 
 read -n1 -r -p "Press any key to continue..." key
 
-cd $ROOTDISK
-find | cpio -ocv | gzip -9 > $DISKIMAGE
+cd $ROOTDISK 
+find | cpio -ocv | gzip -9 > $DISKIMAGE &> $LOG
 chmod 644 $DISKIMAGE
 
 
