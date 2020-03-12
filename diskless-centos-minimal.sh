@@ -1,5 +1,6 @@
 #!/bin/sh
 SCRITP_DIR=`readlink -f $(dirname $0)`
+LOG=$SCRITP_DIR/$(basename $0).log
 export ROOTDISK=/var/lib/diskless/centos7-minimal/
 export DISKIMAGE=/root/tmp/diskless-image/diskless.img
 export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
@@ -9,7 +10,7 @@ then
   echo "!!!! $ROOTDISK already mounted"
   read -n1 -r -p "Press any key to continue..." key
 fi
-rsync -rAav $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum
+rsync -rAa $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum &> $LOG
 
 mkdir -p $ROOTDISK
 
@@ -22,7 +23,12 @@ cd $ROOTDISK
 
 #yum --installroot=$ROOTDISK/ --enablerepo=elrepo install basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client cronie-anacron selinux-policy-targeted vim-minimal kernel-lt
 #yum -y install --releasever=7 --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient yum openssh-server openssh-clients nfs-utils ipa-client vim-minimal util-linux shadow-utils
-yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  basesystem filesystem bash passwd dhclient openssh-server openssh-clients nfs-utils vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron
+echo -n "Installing system ..... "
+yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
+basesystem filesystem bash passwd \
+dhclient openssh-server openssh-clients nfs-utils \
+vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &> $LOG
+echo "Done"
 
 # Configuring yum 
 echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
@@ -52,8 +58,9 @@ rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 # Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
 rm -fr $ROOTDISK/usr/share/man/
+# Keeping cache files
 mkdir -p $SCRITP_DIR/cache/yum
-rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum
+rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum $> $LOG
 rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 
 
