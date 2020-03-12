@@ -21,4 +21,5 @@ cd /
 tar xzf /usr/share/icmat/node-etc.tgz
 cd -
 
+service ganglia-gmond start
 #ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA --unattended
