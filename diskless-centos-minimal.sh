@@ -10,6 +10,7 @@ then
   echo "!!!! $ROOTDISK already mounted"
   read -n1 -r -p "Press any key to continue..." key
 fi
+mkdir -p $ROOTDISK/var/cache/yum
 rsync -rAa $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum 1> $LOG
 
 mkdir -p $ROOTDISK
