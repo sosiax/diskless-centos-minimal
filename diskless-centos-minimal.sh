@@ -9,6 +9,7 @@ then
   echo "!!!! $ROOTDISK already mounted"
   read -n1 -r -p "Press any key to continue..." key
 fi
+rsync -rAav $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum
 
 mkdir -p $ROOTDISK
 
@@ -45,13 +46,16 @@ chroot $ROOTDISK sh -x /root/chroot_cmds.sh
 cp $ROOTDISK/boot/vmlinuz-* $VMLINUZIMAGE
 chmod 755 $VMLINUZIMAGE
 
-# Cleaning up
+##### Cleaning up
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
-rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 # Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
 rm -fr $ROOTDISK/usr/share/man/
+mkdir -p $SCRITP_DIR/cache/yum
+rsync -rAav $ROOTDISK/var/cache/yum $SCRITP_DIR/cache/yum
+rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
+
 
 
 read -n1 -r -p "Press any key to continue..." key
