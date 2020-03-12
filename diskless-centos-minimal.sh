@@ -26,7 +26,7 @@ cd $ROOTDISK
 echo -n "Installing system ..... "
 yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
 basesystem filesystem bash passwd \
-dhclient openssh-server openssh-clients nfs-utils \
+dhclient openssh-server openssh-clients nfs-utils yum \
 vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &> $LOG
 echo "Done"
 
