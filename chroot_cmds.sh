@@ -10,8 +10,12 @@ echo "192.168.1.133:/var/lib/diskless/centos7/usr        /usr                 nf
 echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> /etc/fstab
 
 # reducing locale
+rm -f /etc/rpm/macros.image-language-conf
+sed -i '/^override_install_langs=/d' /etc/yum.conf
+yum reinstall -y glibc-common
+
 localedef --list-archive | grep -v -i ^en| xargs localedef --delete-from-archive
-#mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+mv -f /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
 build-locale-archive
 
 # Set the root password in the image
