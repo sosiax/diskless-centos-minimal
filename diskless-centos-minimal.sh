@@ -72,6 +72,7 @@ chmod 755 $VMLINUZIMAGE
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/vmlinuz-*
 rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
+# Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
 
 cd $ROOTDISK
