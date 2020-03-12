@@ -38,9 +38,13 @@ mkdir -p $ROOTDISK/root/.ssh
 chmod 700 $ROOTDISK/root/.ssh 
 cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
 
-read -n1 -r -p "Press any key to continue..." key
-#yum -y install kernel-lt --enablerepo=elrepo-kernel --releasever=7 --installroot=$ROOTDISK
+# forcing rc-local
+chroot $ROOTDISK "systemctl enable rc-local"
 
+# reducing locale
+chroot $ROOTDISK "localedef --list-archive | grep -v -i ^en| | xargs localedef --delete-from-archive"
+chroot $ROOTDISK "mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl"
+chroot $ROOTDISK "build-locale-archive"
 
 # Set the root password in the image
 echo "root:2dminHPC19" | chroot $ROOTDISK chpasswd
@@ -55,6 +59,7 @@ echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     
 
 # Enable networking
 echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
+
 chmod 644 $ROOTDISK/etc/sysconfig/network
 
 
