@@ -71,7 +71,7 @@ rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 read -n1 -r -p "Press any key to continue..." key
 
 cd $ROOTDISK 
-find | cpio -ocv | gzip -9 > $DISKIMAGE 2>> $LOG
+find | cpio -oc | gzip -9 > $DISKIMAGE 2>> $LOG
 chmod 644 $DISKIMAGE
 
 
