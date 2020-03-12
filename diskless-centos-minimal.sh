@@ -27,42 +27,19 @@ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK
 echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
 echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 
+# coping script files
 cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
-
-#Installing kernel-lt
-#read -n1 -r -p "Press any key to continue..." key
-#cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
-# Coping rc.local
 cp -f $SCRITP_DIR/rc.local $ROOTDISK/etc/rc.local
+cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
+chmod +x $ROOTDISK/root/chroot_cmds.sh 
+
+# Adding ssh passthrought
 mkdir -p $ROOTDISK/root/.ssh 
 chmod 700 $ROOTDISK/root/.ssh 
 cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
 
-# forcing rc-local
-chroot $ROOTDISK "chmod +x /etc/rc.d/rc.local"
-chroot $ROOTDISK "systemctl enable rc-local"
-
-# reducing locale
-chroot $ROOTDISK "localedef --list-archive | grep -v -i ^en| | xargs localedef --delete-from-archive"
-chroot $ROOTDISK "mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl"
-chroot $ROOTDISK "build-locale-archive"
-
-# Set the root password in the image
-echo "root:2dminHPC19" | chroot $ROOTDISK chpasswd
-
-cd $ROOTDISK
-ln -s ./sbin/init ./init
-cd - 
-
-# Updating fstab - TODO : check for cache device 
-echo "192.168.1.133:/var/lib/diskless/centos7/usr        /usr                 nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> $ROOTDISK/etc/fstab
-echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> $ROOTDISK/etc/fstab
-
-# Enable networking
-echo "NETWORKING=yes" > $ROOTDISK/etc/sysconfig/network
-
-chmod 644 $ROOTDISK/etc/sysconfig/network
-
+# Executing chroot commnads
+chroot $ROOTDISK sh -x /root/chroot_cmds.sh 
 
 # Getting kernel
 cp $ROOTDISK/boot/vmlinuz-* $VMLINUZIMAGE
@@ -76,9 +53,6 @@ rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 rm -fr $ROOTDISK/usr/lib/firmware
 rm -fr $ROOTDISK/usr/share/man/
 
-cd $ROOTDISK/usr/share/locale/
-ls -1 | grep -v local | grep -v en$ | xargs rm -fr 
-cd -
 
 read -n1 -r -p "Press any key to continue..." key
 
