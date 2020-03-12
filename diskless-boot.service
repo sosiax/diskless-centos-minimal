@@ -3,7 +3,7 @@ Description = making network connection up
 After = network.target
 
 [Service]
-ExecStart = /root/scripts/diskless-boot.sh
+ExecStart = /root/diskless-boot.sh
 
 [Install]
 WantedBy = multi-user.target
