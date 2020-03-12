@@ -74,6 +74,11 @@ rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 # Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
+rm -fr $ROOTDISK/usr/share/man/
+
+cd $ROOTDISK/usr/share/locale/
+ls -1 | grep -v local | grep -v en$ | xargs rm -fr 
+cd -
 
 read -n1 -r -p "Press any key to continue..." key
 
