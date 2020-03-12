@@ -39,7 +39,7 @@ chmod 700 $ROOTDISK/root/.ssh
 cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
 
 # forcing rc-local
-chroot $ROOTDISK "chmod +x /etc/rc.d/rc.local/"
+chroot $ROOTDISK "chmod +x /etc/rc.d/rc.local"
 chroot $ROOTDISK "systemctl enable rc-local"
 
 # reducing locale
@@ -74,6 +74,8 @@ rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 rm -fr $ROOTDISK/boot/vmlinuz-* $ROOTDISK/boot/init*
 # Atention !!!
 rm -fr $ROOTDISK/usr/lib/firmware
+
+read -n1 -r -p "Press any key to continue..." key
 
 cd $ROOTDISK
 find | cpio -ocv | gzip -9 > $DISKIMAGE
