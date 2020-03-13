@@ -27,6 +27,8 @@ function usage {
   echo "  clean     : Yum clean " 1>&2; 
   echo "  mkinitrd  : create initrd as is in directory " 1>&2; 
   echo "  mkminimal : create initrd removing all un neaded files (nfs mount) " 1>&2; 
+  echo "  intall    : install base system " 1>&2; 
+  echo "  prepare   : copy needed scripts and other stuff" 1>&2; 
   exit 1; 
   }
 
