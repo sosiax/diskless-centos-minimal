@@ -195,7 +195,7 @@ do
     install )
       InstallSystem
       shift;;
-    preapare )
+    prepare )
       IPrepareSystem
       shift;;
     *)
