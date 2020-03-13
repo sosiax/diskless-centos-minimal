@@ -46,6 +46,9 @@ export VMLINUZIMAGE=$(dirname $DISKIMAGE)/vmlinuz-$(basename $DISKIMAGE)
 #  MkInitrd
 #============================
 function MkInitrd {
+  echo "===================================="
+  echo "Creating initrd ..... "
+  echo "===================================="
   cd $ROOTDISK
   time find | cpio -oc | pigz -9 > $DISKIMAGE
   scp $DISKIMAGE $TFTPBOOT_SRV
@@ -55,7 +58,7 @@ function MkInitrd {
 #  MkInitrd
 #============================
 function YumClean() {
-  echo "Cleanning ..." >&2
+  echo "Cleanning yum ..." >&2
   yum clean all --installroot=$ROOTDISK
   rm -fr $ROOTDISK/var/cache/yum
 }
@@ -64,6 +67,10 @@ function YumClean() {
 #  MkInitrd
 #============================
 function ReduceDiskSpace () {
+  echo "===================================="
+  echo "Reducing Disk space "
+  echo "===================================="
+  
   [[ -e $DISK_PATH/diskless.var.lib.rpm.tgz ]] && echo "Removing old TAR : $DISK_PATH/diskless.var.lib.rpm.tgz" && rm -f $DISK_PATH/diskless.var.lib.rpm.tgz
   
   cd $ROOTDISK
@@ -80,6 +87,9 @@ function ReduceDiskSpace () {
 #  MkInitrd
 #============================
 function ExpandDiskSpace () {
+  echo "===================================="
+  echo "Extranting tgz .... "
+  echo "===================================="
   cd $ROOTDISK
   tar -I pigz -xf $SCRITP_DIR/var.tgz var/
   tar -I pigz -xf $SCRITP_DIR/diskless.var.lib.rpm.tgz 
@@ -90,23 +100,27 @@ function ExpandDiskSpace () {
 #  MkInitrd
 #============================
 function InstallSystem () {
-  echo -n "Installing system ..... "
-  yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" &>> $LOG
+  echo "===================================="
+  echo "Installing system ..... "
+  echo "===================================="
+  yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
   cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
   yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      basesystem filesystem bash passwd \
      dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
-     vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &>> $LOG
+     vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
   
   yum -y remove --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK "kernel*3*"
   
   # Configuring yum 
   echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
   echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
-  echo "Done"
 }
 
 function PrepareSystem(){
+  echo "===================================="
+  echo "Preparing system ..... "
+  echo "===================================="
   # coping script files
   cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
   cp -f $SCRITP_DIR/diskless-boot.sh $ROOTDISK/root/
