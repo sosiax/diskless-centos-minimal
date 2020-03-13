@@ -81,6 +81,10 @@ function ReduceDiskSpace () {
   tar -I pigz -cf $SCRITP_DIR/var.tgz var/
   [ $? -eq 0 ] && echo "Tar compression /var OK : $SCRITP_DIR/var.tgz"
   cd -
+  
+  # Configuring yum 
+  echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
+  echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 }
 
 #============================
@@ -93,6 +97,9 @@ function ExpandDiskSpace () {
   cd $ROOTDISK
   tar -I pigz -xf $SCRITP_DIR/var.tgz var/
   tar -I pigz -xf $SCRITP_DIR/diskless.var.lib.rpm.tgz 
+  # Configuring yum 
+  sed -i '/^diskspacecheck=/d' /etc/yum.conf
+  sed -i '/^keepcache=/d' /etc/yum.conf
   cd -
 }
 
