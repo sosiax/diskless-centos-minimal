@@ -28,9 +28,11 @@ function usage {
   echo "  mkinitrd  : create initrd as is in directory " 1>&2; 
   echo "  mkminimal : create initrd removing all un neaded files (nfs mount) " 1>&2; 
   echo "  intall    : install base system " 1>&2; 
-  echo "  prepare   : copy needed scripts and other stuff" 1>&2; 
-  exit 1; 
-  }
+  echo "  reduce    : copy needed scripts and other stuff" 1>&2; 
+  echo "  expand    : reverse of reduce" 1>&2; 
+  echo "  save      : full local copy" 1>&2; 
+  echo "  restore   : restore ful local copy" 1>&2; 
+}
 
 #=======================================================================
 # GLOBAL VARIABLES
@@ -124,6 +126,9 @@ function InstallSystem () {
   echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
 }
 
+#============================
+#  Prepare
+#============================
 function PrepareSystem(){
   echo "===================================="
   echo "Preparing system ..... "
@@ -143,6 +148,29 @@ function PrepareSystem(){
   # Executing chroot commnads
   chroot $ROOTDISK sh -x /root/chroot_cmds.sh 
 }
+
+#============================
+#  Save
+#============================
+function Save(){
+  echo "===================================="
+  echo "Saving to $SCRITP_DIR/diskless.full.tgz ..... "
+  echo "===================================="
+  tar -I pigz -cf $SCRITP_DIR/diskless.full.tgz $ROOTDISK
+}
+
+#============================
+#  Restore
+#============================
+function Restore(){
+  echo "===================================="
+  echo "Restoring from $SCRITP_DIR/diskless.full.tgz ..... "
+  echo "===================================="
+  cd $ROOTDISK
+  tar -I pigz -xf $SCRITP_DIR/diskless.full.tgz 
+  cd -
+}
+
 #=============================================
 #  Main
 #=============================================
@@ -205,6 +233,18 @@ do
       shift;;
     prepare )
       PrepareSystem
+      shift;;
+    reduce )
+      ReduceDiskSpace
+      shift;;
+    expand )
+      ExpandDiskSpace
+      shift;;
+    save )
+      Save
+      shift;;
+    restore )
+      Restore
       shift;;
     *)
       echo "Inavalid command : $command" >&2
