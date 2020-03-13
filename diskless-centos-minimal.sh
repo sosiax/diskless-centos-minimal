@@ -196,7 +196,7 @@ do
       InstallSystem
       shift;;
     prepare )
-      IPrepareSystem
+      PrepareSystem
       shift;;
     *)
       echo "Inavalid command : $command" >&2
