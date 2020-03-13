@@ -16,7 +16,7 @@ rsync -rAa $SCRITP_DIR/cache/yum $ROOTDISK/var/cache/yum 1> $LOG
 mkdir -p $ROOTDISK
 
 # Speed up image building -- Atention!
-mount -t tmpfs -o size=4G,nr_inodes=40k tmpfs $ROOTDISK
+mount -t tmpfs -o size=4G,nr_inodes=400k tmpfs $ROOTDISK
 
 cd $ROOTDISK
 yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima"
