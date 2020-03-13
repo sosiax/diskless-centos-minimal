@@ -166,6 +166,7 @@ done
 # Checking fs mounted
 if mount $ROOTDISK &> /dev/null 
 then 
+  umount $ROOTDISK
   echo "!!!! $ROOTDISK already mounted"
   read -n1 -r -p "Press any key to continue..." key
 else
