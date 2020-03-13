@@ -95,6 +95,9 @@ function InstallSystem () {
      basesystem filesystem bash passwd \
      dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
      vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron &>> $LOG
+  
+  yum -y remove --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK "kernel*3*"
+  
   # Configuring yum 
   echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
   echo "keepcache=0" >> $ROOTDISK/etc/yum.conf
