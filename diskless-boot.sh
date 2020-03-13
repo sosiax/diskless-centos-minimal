@@ -12,9 +12,16 @@
 
 touch /var/lock/subsys/diskless-boot
 
-#TODO : check for cache device 
 dhclient
+
+#TODO : check for cache device 
+echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
+echo "192.168.1.133:/var/lib/diskless/centos7/usr /usr     nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    1 1" >> /etc/fstab
+
 mount -a
+
+sleep 2
+
 loadkeys es
 
 cd /

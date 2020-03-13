@@ -6,10 +6,6 @@ chmod +x /root/diskless-boot.sh
 systemctl enable diskless-boot
 
 
-# Updating fstab - TODO : check for cache device 
-echo "192.168.1.133:/var/lib/diskless/centos7/usr        /usr                 nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> /etc/fstab
-echo "nfs-lustre.icmat.es:/mnt/lustre_fs        /LUSTRE                 nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc 1 1" >> /etc/fstab
-
 # Set the root password in the image
 echo "root:2dminHPC19" | chpasswd
 
