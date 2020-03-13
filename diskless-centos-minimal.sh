@@ -147,7 +147,7 @@ while getopts ":a:" opt; do
   esac
 done
 
-command=$1
+[ $# -eq 0 ] && usage && exit 
 
 # Checking fs mounted
 if mount $ROOTDISK &> /dev/null 
@@ -161,31 +161,36 @@ else
 fi
 
 # Executing commnad
-case $command in
-  clean )
-    YumClean
-    ;;
-  mkinitrd )
-    echo "mkinitrd" >&2
-    MkInitrd 
-    ;;
-  mkminimal )
-    YumClean
-    ReduceDiskSpace
-    MkInitrd 
-    ExpandDiskSpace
-    ;;
-  install )
-    InstallSystem
-    ;;
-  preapare )
-    IPrepareSystem
-    ;;
-  *)
-    echo "Inavalid command : $command" >&2
-    usage
-    ;;
-esac
+while [[ $# -gt 0 ]]
+do
+  command=$1
+  case $command in
+    clean )
+      YumClean
+      shift;;
+    mkinitrd )
+      echo "mkinitrd" >&2
+      MkInitrd 
+      shift;;
+    mkminimal )
+      YumClean
+      ReduceDiskSpace
+      MkInitrd 
+      ExpandDiskSpace
+      shift;;
+    install )
+      InstallSystem
+      shift;;
+    preapare )
+      IPrepareSystem
+      shift;;
+    *)
+      echo "Inavalid command : $command" >&2
+      usage
+      shift;;
+  esac
+done
+  
 
 
 
