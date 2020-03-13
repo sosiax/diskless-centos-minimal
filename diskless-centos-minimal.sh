@@ -19,7 +19,7 @@ mkdir -p $ROOTDISK
 mount -t tmpfs -o size=4G,nr_inodes=40k tmpfs $ROOTDISK
 
 cd $ROOTDISK
-#yum group -y install --installroot=$ROOTDISK "Instalación mínima"
+yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima"
 
 # install base binaries.  If you're not using puppet and IPA, this list can be trimmed.
 
@@ -70,7 +70,7 @@ rm -fr $ROOTDISK/var/cache/yum $ROOTDISK/var/lib/yum/*
 
 
 
-read -n1 -r -p "Press any key to continue..." key
+#~ read -n1 -r -p "Press any key to continue..." key
 
 cd $ROOTDISK 
 find | cpio -oc | gzip -9 > $DISKIMAGE 2>> $LOG
