@@ -112,14 +112,19 @@ function InstallSystem () {
   echo "===================================="
   echo "Installing system ..... "
   echo "===================================="
-  yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
-  cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
+  #yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
+  #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
+  #~ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
+     #~ basesystem filesystem bash passwd \
+     #~ dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
+     #~ vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
+  #~ yum -y remove --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK "kernel-3*"
+  
   yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      basesystem filesystem bash passwd \
      dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
      vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
   
-  yum -y remove --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK "kernel-3*"
   
   # Configuring yum 
   echo "diskspacecheck=0" >> $ROOTDISK/etc/yum.conf
