@@ -76,7 +76,7 @@ function ReduceDiskSpace () {
   [[ -e $DISK_PATH/diskless.var.lib.rpm.tgz ]] && echo "Removing old TAR : $DISK_PATH/diskless.var.lib.rpm.tgz" && rm -f $DISK_PATH/diskless.var.lib.rpm.tgz
   
   cd $ROOTDISK
-  BAK_LIST="var/lib/rpm var/lib/yum usr/share/man usr/share/doc boot/"
+  BAK_LIST="var/lib/rpm var/lib/yum usr/share/man usr/share/doc boot/ usr/lib/firmware"
   tar -I pigz -cf $SCRITP_DIR/diskless.var.lib.rpm.tgz $BAK_LIST
   [ $? -eq 0 ] && echo "Tar compresion OK : $SCRITP_DIR/diskless.var.lib.rpm.tgz" && rm -fr $BAK_LIST
   
