@@ -2,7 +2,7 @@
 
 #  diskless-centos-minimal.sh
 #  
-#  Copyright 2020 Alfonso Núñez Salgadp <anunez@icmat.es>
+#  Copyright 2020 Alfonso Núñez Salgado <anunez@icmat.es>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ function ReduceDiskSpace () {
   [[ -e $DISK_PATH/diskless.var.lib.rpm.tgz ]] && echo "Removing old TAR : $DISK_PATH/diskless.var.lib.rpm.tgz" && rm -f $DISK_PATH/diskless.var.lib.rpm.tgz
   
   cd $ROOTDISK
-  BAK_LIST="var/lib/rpm var/lib/yum usr/lpp usr/share/man usr/share/doc boot/"
+  BAK_LIST="var/lib/rpm var/lib/yum usr/share/man usr/share/doc boot/"
   tar -I pigz -cf $SCRITP_DIR/diskless.var.lib.rpm.tgz $BAK_LIST
   [ $? -eq 0 ] && echo "Tar compresion OK : $SCRITP_DIR/diskless.var.lib.rpm.tgz" && rm -fr $BAK_LIST
   
@@ -190,7 +190,7 @@ while getopts ":a:" opt; do
       exit 1
       ;;
     *)
-    echo "Option -$OPTARG requires an argument." >&2
+      echo "Option -$OPTARG requires an argument." >&2
       exit 1
       ;;
   esac
