@@ -32,7 +32,7 @@ then
 	mount  -o user_xattr $cache_dev /mnt/cache/ || fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 	mkdir -p /mnt/cache/fscache
 	service cachefilesd restart 
-else
+fi
 
 
 DIRLIST="/root /var /etc"
