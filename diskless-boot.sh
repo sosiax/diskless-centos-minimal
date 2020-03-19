@@ -22,34 +22,46 @@ modprobe overlay || fail "ERROR: missing overlay kernel module"
 
 # create a writable fs to then create our mountpoints
 mount -t tmpfs tmpfs /mnt || fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
-mkdir -p /mnt/cache/
+mkdir -p /mnt/overlay/
+mkdir -p /mnt/fscache/
 
-#look for fscache LABEL
-cache_dev=`blkid -L fscache`
-if [ -z $cache_dev ]
-then 
-	# create a writable fs to then create our mountpoints
-	mount  -o user_xattr $cache_dev /mnt/cache/ || fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
-	mkdir -p /mnt/cache/fscache
-	service cachefilesd restart 
-fi
 
+#======================
+# look for overlay LABEL
+#======================
+# create a writable fs to then create our mountpoints
+mount  -o user_xattr LABEL=overlay $cache_dev /mnt/overlay/ || \
+  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/100)) tmpfs /mnt/overlay || \
+    fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 DIRLIST="/root /var /etc"
 for fs in $DIRLIST
 do
   fsname=`echo $fs | tr '/' '-'`
-  mkdir -p /mnt/cache/overlay/$fs/up
-  mkdir -p /mnt/cache/overlay/$fs/work
+  mkdir -p /mnt/overlay/$fs/up
+  mkdir -p /mnt/overlay/$fs/work
+  if [ ! -e /mnt/overlay/$fs/up/.overlay ]
+	rsync -av -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/
+	touch /mnt/overlay/$fs/up/.overlay
+  fi
   mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/cache/overlay/$fs/up,workdir=/mnt/cache/overlay/$fs/work $fs
 done
 
-#Check IP
+#======================
+# look for fscache LABEL
+#======================
+mount  -o user_xattr LABEL=fscache $cache_dev /mnt/fscache/ || \
+  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10)) tmpfs /mnt/fscache || \
+    fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
+service cachefilesd restart 
+mount -o remount /
+
+
+# Check IP is 192.168.x.x
 ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient
 
-#TODO : check for cache device 
+# Lustre mount
 echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
-#echo "192.168.1.133:/var/lib/diskless/centos7/usr /usr     nfs     ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    1 1" >> /etc/fstab
 
 mount -a
 
