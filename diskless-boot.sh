@@ -45,7 +45,7 @@ do
 	rsync -a -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/ > /dev/null
 	touch /mnt/overlay/$fs/up/.overlay
   fi
-  mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/cache/overlay/$fs/up,workdir=/mnt/cache/overlay/$fs/work $fs || fail "ERROR mounting overlay on $fs"
+  mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/overlay/$fs/up,workdir=/mnt/overlay/$fs/work $fs || fail "ERROR mounting overlay on $fs"
 done
 
 #======================
