@@ -3,6 +3,4 @@ none                                        /tmp                   tmpfs   defau
 tmpfs                                       /dev/shm               tmpfs   defaults   0 0
 sysfs                                       /sys                   sysfs   defaults   0 0
 proc                                        /proc                  proc    defaults   0 0
-LABEL="var"                                 /var/                  auto    defaults   0 2
-LABEL="fscache"                             /var/cache/fscache     auto    defaults   0 2
 nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE                nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 0 2

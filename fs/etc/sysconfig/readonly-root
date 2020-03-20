@@ -8,11 +8,11 @@ TEMPORARY_STATE=yes
 # Place to put a tmpfs for temporary scratch writable space
 RW_MOUNT=/var/lib/stateless/writable
 # Label on local filesystem which can be used for temporary scratch space
-RW_LABEL=stateless-rw
+RW_LABEL=fscache
 # Options to use for temporary mount
 RW_OPTIONS=
 # Label for partition with persistent data
-STATE_LABEL=fscache
+STATE_LABEL=var
 # Where to mount to the persistent data
 STATE_MOUNT=/var/lib/stateless/state
 # Options to use for persistent mount
