@@ -1,0 +1,1 @@
+../../diskless-boot.sh
