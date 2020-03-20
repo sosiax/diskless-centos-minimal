@@ -31,7 +31,7 @@ mkdir -p /mnt/fscache/
 #======================
 # create a writable fs to then create our mountpoints
 mount  -o user_xattr LABEL=overlay $cache_dev /mnt/overlay/ || \
-  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/100)) tmpfs /mnt/overlay || \
+  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/100))K tmpfs /mnt/overlay || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 DIRLIST="/root /var /etc"
@@ -52,7 +52,7 @@ done
 # look for fscache LABEL
 #======================
 mount  -o user_xattr LABEL=fscache $cache_dev /mnt/fscache/ || \
-  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10)) tmpfs /mnt/fscache || \
+  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs /mnt/fscache || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 service cachefilesd restart 
 mount -o remount /
@@ -62,6 +62,8 @@ mount -o remount /
 ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient
 
 # Lustre mount
+mv /etc/fstab /etc/fstab.orig
+cp /etc/fstab.orig /etc/fstab
 echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
 
 mount -a
