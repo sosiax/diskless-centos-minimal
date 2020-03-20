@@ -42,10 +42,10 @@ do
   mkdir -p /mnt/overlay/$fs/work
   if [ ! -e /mnt/overlay/$fs/up/.overlay ]
   then
-	rsync -av -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/
+	rsync -a -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/ > /dev/null
 	touch /mnt/overlay/$fs/up/.overlay
   fi
-  mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/cache/overlay/$fs/up,workdir=/mnt/cache/overlay/$fs/work $fs
+  mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/cache/overlay/$fs/up,workdir=/mnt/cache/overlay/$fs/work $fs || fail "ERROR mounting overlay on $fs"
 done
 
 #======================
