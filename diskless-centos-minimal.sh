@@ -142,8 +142,6 @@ function PrepareSystem(){
   #~ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
   #~ cp -f $SCRITP_DIR/diskless-boot.sh $ROOTDISK/root/
   #~ cp -f $SCRITP_DIR/diskless-boot.service $ROOTDISK/usr/lib/systemd/system/ 
-  #~ cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
-  #~ chmod +x $ROOTDISK/root/chroot_cmds.sh 
   
   #~ # Adding ssh passthrought
   #~ mkdir -p $ROOTDISK/root/.ssh 
@@ -153,6 +151,8 @@ function PrepareSystem(){
   rsync -raALv fs/ $ROOTDISK/
   
   # Executing chroot commnads
+  cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
+  chmod +x $ROOTDISK/root/chroot_cmds.sh 
   chroot $ROOTDISK sh -x /root/chroot_cmds.sh 
 }
 
