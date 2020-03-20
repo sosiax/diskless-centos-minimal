@@ -41,6 +41,7 @@ do
   mkdir -p /mnt/overlay/$fs/up
   mkdir -p /mnt/overlay/$fs/work
   if [ ! -e /mnt/overlay/$fs/up/.overlay ]
+  then
 	rsync -av -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/
 	touch /mnt/overlay/$fs/up/.overlay
   fi
