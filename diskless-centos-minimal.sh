@@ -147,8 +147,8 @@ function PrepareSystem(){
   #~ mkdir -p $ROOTDISK/root/.ssh 
   #~ chmod 700 $ROOTDISK/root/.ssh 
   #~ cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
-  
-  rsync -raALv fs/ $ROOTDISK/
+  chmod 600 $SCRITP_DIR/fs/etc/ssh/*
+  rsync -raALv $SCRITP_DIR/fs/ $ROOTDISK/
   
   # Executing chroot commnads
   cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
