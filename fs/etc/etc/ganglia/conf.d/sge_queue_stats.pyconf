@@ -1,0 +1,23 @@
+modules {
+  module {
+    name    = "sge_queue_stats"
+    language = "python"
+    param sgeroot {
+      value = "/LUSTRE/apps/oge"
+    }
+    param qstat {
+      value = "/LUSTRE/apps/oge/bin/linux-x64/qstat"
+    }
+  }
+
+}
+collection_group {
+  collect_every  = 15
+  time_threshold = 50
+
+  metric {
+    name_match = "sge_queue_(.+)"
+  }
+}
+
+
