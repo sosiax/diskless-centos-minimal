@@ -139,16 +139,18 @@ function PrepareSystem(){
   echo "Preparing system ..... "
   echo "===================================="
   # coping script files
-  cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
-  cp -f $SCRITP_DIR/diskless-boot.sh $ROOTDISK/root/
-  cp -f $SCRITP_DIR/diskless-boot.service $ROOTDISK/usr/lib/systemd/system/ 
-  cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
-  chmod +x $ROOTDISK/root/chroot_cmds.sh 
+  #~ cp /etc/profile.d/icmat.sh $ROOTDISK/etc/profile.d/icmat.sh	
+  #~ cp -f $SCRITP_DIR/diskless-boot.sh $ROOTDISK/root/
+  #~ cp -f $SCRITP_DIR/diskless-boot.service $ROOTDISK/usr/lib/systemd/system/ 
+  #~ cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
+  #~ chmod +x $ROOTDISK/root/chroot_cmds.sh 
   
-  # Adding ssh passthrought
-  mkdir -p $ROOTDISK/root/.ssh 
-  chmod 700 $ROOTDISK/root/.ssh 
-  cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
+  #~ # Adding ssh passthrought
+  #~ mkdir -p $ROOTDISK/root/.ssh 
+  #~ chmod 700 $ROOTDISK/root/.ssh 
+  #~ cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
+  
+  rsync -raALv fs/ $ROOTDISK/
   
   # Executing chroot commnads
   chroot $ROOTDISK sh -x /root/chroot_cmds.sh 
