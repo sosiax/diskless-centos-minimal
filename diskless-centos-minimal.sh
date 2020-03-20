@@ -212,7 +212,7 @@ then
 else
   mkdir -p $ROOTDISK
   # Speed up image building -- Atention!
-  mount -t tmpfs -o size=10G,nr_inodes=400k tmpfs $ROOTDISK
+  mount -t tmpfs -o size=4G,nr_inodes=400k tmpfs $ROOTDISK
 fi
 
 # Executing commnad

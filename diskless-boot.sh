@@ -12,9 +12,27 @@
 
 touch /var/lock/subsys/diskless-boot
 
+initializeFS(){
+  fs=$1
+  dest=$3
+  if [ ! -e $dest/.overlay ]
+  then 
+   echo "Inicilizing $fs"
+   case $fs in 
+     /var )
+       rsync -raAv --ignore-existing --exclude=*yum* $fs/ $dest/ 
+       ;;
+     * )
+       rsync -a --ignore-existing -f"+ */" -f"- *" $fs/ $dest/ > /dev/null
+       ;;
+    esac
+    touch $dest/.overlay
+  fi
+} 
+
 fail(){
-	echo -e "$1"
-	exit 1
+  echo -e "$1"
+  exit 1
 }
 
 # load module
@@ -37,15 +55,15 @@ mount  -o user_xattr LABEL=overlay $cache_dev /mnt/overlay/ || \
 DIRLIST="/root /var /etc"
 for fs in $DIRLIST
 do
-  fsname=`echo $fs | tr '/' '-'`
-  mkdir -p /mnt/overlay/$fs/up
-  mkdir -p /mnt/overlay/$fs/work
-  if [ ! -e /mnt/overlay/$fs/up/.overlay ]
-  then
-	rsync -a -f"+ */" -f"- *" $fs/ /mnt/overlay/$fs/ > /dev/null
-	touch /mnt/overlay/$fs/up/.overlay
+  mount -o remount $fs > /dev/null
+  if [ $? -ne 0 ]
+  then 
+    fsname=`echo $fs | tr '/' '-'`
+    mkdir -p /mnt/overlay/$fs/up
+    mkdir -p /mnt/overlay/$fs/work
+    initializeFS $fs /mnt/overlay/$fs/up 
+    mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/overlay/$fs/up,workdir=/mnt/overlay/$fs/work $fs || fail "ERROR mounting overlay on $fs"
   fi
-  mount -t overlay overlay$fsname -o lowerdir=$fs,upperdir=/mnt/overlay/$fs/up,workdir=/mnt/overlay/$fs/work $fs || fail "ERROR mounting overlay on $fs"
 done
 
 #======================
