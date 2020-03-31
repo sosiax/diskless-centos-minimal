@@ -14,7 +14,7 @@ touch /var/lock/subsys/diskless-boot
 
 initializeFS(){
   fs=$1
-  dest=$3
+  dest=$2
   if [ ! -e $dest/.overlay ]
   then 
    echo "Inicilizing $fs"
@@ -97,6 +97,8 @@ ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` ||
 sleep 2
 
 loadkeys es
+service certmonger restart
+
 
 #~ cd /
 #~ tar xzf /usr/share/icmat/node-etc.tgz
