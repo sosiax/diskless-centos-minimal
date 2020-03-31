@@ -69,12 +69,20 @@ done
 #======================
 # look for fscache LABEL
 #======================
-#~ mkdir -p /mnt/fscache/
-#~ mount  LABEL=fscache $cache_dev /mnt/fscache/ || \
-  #~ mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs /mnt/fscache || \
-    #~ fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
-#service cachefilesd restart 
-
+read -a cachedir <<<`grep 'dir ' /etc/cachefilesd.conf`
+if [ ! -z ${cachedir[1]} ]
+then
+  FSCACHEDIR=${cachedir[1]}
+  mkdir -p $FSCACHEDIR
+  mount  LABEL=fscache $cache_dev $FSCACHEDIR || \
+    mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs $FSCACHEDIR || \
+      fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs: $FSCACHEDIR"
+  service cachefilesd restart 
+  for dir in `mount | grep 'type nfs' | awk '{print $3}'`
+  do
+    mount -o remount $dir
+  done
+fi
 
 # Check IP is 192.168.x.x
 ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient
