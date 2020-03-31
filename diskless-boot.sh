@@ -41,19 +41,18 @@ modprobe overlay || fail "ERROR: missing overlay kernel module"
 # create a writable fs to then create our mountpoints
 mount -t tmpfs tmpfs /mnt || fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 mkdir -p /mnt/overlay/
-mkdir -p /mnt/fscache/
 
 
 #======================
 # look for overlay LABEL
 #======================
 # create a writable fs to then create our mountpoints
-mount  -o user_xattr LABEL=stlessST $cache_dev /mnt/overlay/ || \
+mount  LABEL=stlessST $cache_dev /mnt/overlay/ || \
   mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/100))K tmpfs /mnt/overlay || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 #DIRLIST="/root /var /etc"
-DIRLIST="/root /etc"
+DIRLIST="/root /etc /var/lib/certmonger/"
 for fs in $DIRLIST
 do
   mount -o remount $fs > /dev/null
@@ -70,9 +69,10 @@ done
 #======================
 # look for fscache LABEL
 #======================
-mount  -o user_xattr LABEL=fscache $cache_dev /mnt/fscache/ || \
-  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs /mnt/fscache || \
-    fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
+#~ mkdir -p /mnt/fscache/
+#~ mount  LABEL=fscache $cache_dev /mnt/fscache/ || \
+  #~ mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs /mnt/fscache || \
+    #~ fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 #service cachefilesd restart 
 
 
