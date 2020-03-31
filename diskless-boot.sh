@@ -52,7 +52,7 @@ mount  LABEL=stlessST $cache_dev /mnt/overlay/ || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 #DIRLIST="/root /var /etc"
-DIRLIST="/root /etc /var/lib/certmonger/"
+DIRLIST="/root /etc /var"
 for fs in $DIRLIST
 do
   mount -o remount $fs > /dev/null
