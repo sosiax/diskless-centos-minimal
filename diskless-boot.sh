@@ -20,6 +20,7 @@ initializeFS(){
    echo "Inicilizing $fs"
    case $fs in 
      /var )
+	   rm -fr $dest/*
        rsync -raAv --ignore-existing --exclude=*yum* $fs/ $dest/ 
        ;;
      * )
@@ -52,7 +53,7 @@ mount  LABEL=stlessST $cache_dev /mnt/overlay/ || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 #DIRLIST="/root /var /etc"
-DIRLIST="/root /etc /var"
+DIRLIST="/root /etc /var/lib/certmonger/"
 for fs in $DIRLIST
 do
   mount -o remount $fs > /dev/null
