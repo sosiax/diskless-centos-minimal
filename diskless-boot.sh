@@ -17,7 +17,7 @@ initializeFS(){
   dest=$2
   echo "Inicilizing $fs"
   case $fs in 
-     /var )
+     /var | /etc )
 	   rm -fr $dest/*
        rsync -raAv --ignore-existing --exclude=*yum* $fs/ $dest/ 
        ;;
