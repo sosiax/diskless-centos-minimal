@@ -15,20 +15,21 @@ touch /var/lock/subsys/diskless-boot
 initializeFS(){
   fs=$1
   dest=$2
-  if [ ! -e $dest/.overlay ]
-  then 
-   echo "Inicilizing $fs"
-   case $fs in 
+  echo "Inicilizing $fs"
+  case $fs in 
      /var )
 	   rm -fr $dest/*
        rsync -raAv --ignore-existing --exclude=*yum* $fs/ $dest/ 
        ;;
-     * )
+     /root )
        rsync -a --ignore-existing -f"+ */" -f"- *" $fs/ $dest/ > /dev/null
        ;;
-    esac
-    touch $dest/.overlay
-  fi
+     * )
+       rm -fr $dest/*
+       rsync -a --ignore-existing -f"+ */" -f"- *" $fs/ $dest/ > /dev/null
+       ;;
+  esac
+  
 } 
 
 fail(){
