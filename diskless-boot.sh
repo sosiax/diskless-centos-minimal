@@ -54,7 +54,7 @@ mount  LABEL=stlessST $cache_dev /mnt/overlay/ || \
     fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
 
 #DIRLIST="/root /var /etc"
-DIRLIST="/root /etc /var"
+DIRLIST=""
 for fs in $DIRLIST
 do
   mount -o remount $fs > /dev/null
@@ -92,19 +92,19 @@ ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` ||
 # Lustre mount - already in fstab
 #~ mv /etc/fstab /etc/fstab.orig
 #~ cp /etc/fstab.orig /etc/fstab
-#~ echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
+echo "ada.icmat.es:/var/lib/diskless/centos7/opt  /opt  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=opt    1 1" >> /etc/fstab
+echo "ada.icmat.es:/var/lib/diskless/centos7/usr  /usr  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    1 1" >> /etc/fstab
+echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
 
-#mount -a -o remount
+cd /
+tar xzf opt/icmat/config/odisea/node-etc.tgz
+cd -
+
+mount -a -o remount
 
 sleep 2
 
 loadkeys es
-service certmonger restart
-
-
-#~ cd /
-#~ tar xzf /usr/share/icmat/node-etc.tgz
-#~ cd -
-
+#~ service certmonger restart
 #~ service ganglia-gmond start
 #ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA --unattended

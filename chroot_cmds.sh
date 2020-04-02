@@ -7,7 +7,7 @@ systemctl enable diskless-boot
 
 
 # Set the root password in the image
-echo "root:2dminHPC19" | chpasswd
+#~ echo "root:2dminHPC19" | chpasswd
 
 # Enable networking
 echo "NETWORKING=yes" > /etc/sysconfig/network
