@@ -106,4 +106,4 @@ sleep 2
 
 telini 3
 
-#ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA19 --unattended
+ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA19 --unattended
