@@ -61,7 +61,7 @@ function MkInitrd {
 #============================
 function YumClean() {
   echo "Cleanning yum ..." >&2
-  yum clean all --enamblerepo=* --installroot=$ROOTDISK
+  yum clean all --enablerepo=* --installroot=$ROOTDISK
   rm -fr $ROOTDISK/var/cache/yum
 }
 
