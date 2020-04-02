@@ -92,12 +92,13 @@ ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` ||
 # Lustre mount - already in fstab
 #~ mv /etc/fstab /etc/fstab.orig
 #~ cp /etc/fstab.orig /etc/fstab
-echo "ada.icmat.es:/var/lib/diskless/centos7/opt  /opt  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=opt    1 1" >> /etc/fstab
 echo "ada.icmat.es:/var/lib/diskless/centos7/usr  /usr  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    1 1" >> /etc/fstab
 echo "nfs-lustre.icmat.es:/mnt/lustre_fs          /LUSTRE  nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 1 1" >> /etc/fstab
 
 cd /
-tar xzf opt/icmat/config/odisea/node-etc.tgz
+tar xzf /usr/share/icmat/node-etc.tgz
+sh /opt/icmat/sbin/build-login-files.sh merge
+rsync -raAv /opt/icmat/config/odisea/ /
 cd -
 
 mount -a -o remount

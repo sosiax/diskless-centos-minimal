@@ -128,7 +128,7 @@ function InstallSystem () {
   yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      basesystem filesystem bash passwd \
      dhclient openssh-server openssh-clients nfs-utils yum polkit\
-     util-linux kernel-lt net-tools
+     util-linux kernel-lt 
   
   
   # Configuring yum 
@@ -154,6 +154,8 @@ function PrepareSystem(){
   #~ cp -pr /root/.ssh/authorized_keys /root/.ssh/known_hosts $ROOTDISK/root/.ssh 
   chmod 600 $SCRITP_DIR/fs/etc/ssh/*
   rsync -raALv $SCRITP_DIR/fs/ $ROOTDISK/
+  mkdir -p $ROOTDISK/opt/icmat/
+  rsync -raA --delete /opt/icmat/ $ROOTDISK/opt/icmat/
   
   # Executing chroot commnads
   cp -f $SCRITP_DIR/chroot_cmds.sh $ROOTDISK/root/
