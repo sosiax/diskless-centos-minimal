@@ -113,7 +113,10 @@ function InstallSystem () {
   echo "===================================="
   echo "Installing system ..... "
   echo "===================================="
-  #yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
+  
+  yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
+  yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK \
+     kernel-lt 
   #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
   #~ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      #~ basesystem filesystem bash passwd \
@@ -126,10 +129,10 @@ function InstallSystem () {
      #~ dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
      #~ vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
   
-  yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
-     basesystem filesystem bash passwd \
-     dhclient openssh-server openssh-clients nfs-utils yum polkit\
-     util-linux kernel-lt 
+  #~ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
+     #~ basesystem filesystem bash passwd \
+     #~ dhclient openssh-server openssh-clients nfs-utils yum polkit\
+     #~ util-linux kernel-lt 
   
   
   # Configuring yum 
