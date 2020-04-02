@@ -1,0 +1,14 @@
+auto
+/usr/bin/mkisofs
+mkisofs-mkisofsman
+/usr/share/man/man1/mkisofs.1.gz
+mkisofs-mkhybrid
+/usr/bin/mkhybrid
+mkisofs-mkhybridman
+/usr/share/man/man1/mkhybrid.1.gz
+
+/usr/bin/genisoimage
+50
+/usr/share/man/man1/genisoimage.1.gz
+/usr/bin/genisoimage
+/usr/share/man/man1/genisoimage.1.gz

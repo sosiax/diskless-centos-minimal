@@ -1,0 +1,5 @@
+auto
+/usr/lib64/libwbclient.so.0.14
+
+/usr/lib64/samba/wbclient/libwbclient.so.0.14
+10

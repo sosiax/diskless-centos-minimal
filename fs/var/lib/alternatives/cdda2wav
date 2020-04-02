@@ -1,0 +1,8 @@
+auto
+/usr/bin/cdda2wav
+cdda2wav-cdda2wavman
+/usr/share/man/man1/cdda2wav.1.gz
+
+/usr/bin/icedax
+50
+/usr/share/man/man1/icedax.1.gz

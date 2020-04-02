@@ -1,0 +1,8 @@
+auto
+/usr/bin/nc
+ncman
+/usr/share/man/man1/nc.1.gz
+
+/usr/bin/ncat
+10
+/usr/share/man/man1/ncat.1.gz

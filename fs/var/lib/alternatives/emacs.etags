@@ -1,0 +1,8 @@
+auto
+/usr/bin/etags
+emacs.etags.man
+/usr/share/man/man1/etags.1.gz
+
+/usr/bin/etags.emacs
+80
+/usr/share/man/man1/etags.emacs.1.gz
