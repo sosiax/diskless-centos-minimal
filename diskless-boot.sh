@@ -38,7 +38,7 @@ fail(){
 }
 
 # load module
-modprobe overlay || fail "ERROR: missing overlay kernel module"
+#~ modprobe overlay || fail "ERROR: missing overlay kernel module"
 
 # create a writable fs to then create our mountpoints
 mount -t tmpfs tmpfs /mnt || fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs"
