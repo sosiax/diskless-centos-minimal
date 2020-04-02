@@ -91,7 +91,11 @@ ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` ||
 
 # Lustre mount - already in fstab
 
-mount -a -o remount
+mount -a 
+for i in `mount | grep 'type nfs' | awk '{ print $3}'`
+do 
+   mount -o remount $i
+done
 
 cd /
 tar xzf /usr/share/icmat/node-etc.tgz
@@ -106,4 +110,4 @@ sleep 2
 
 telini 3
 
-#ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA19 --unattended
+ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA19 --unattended
