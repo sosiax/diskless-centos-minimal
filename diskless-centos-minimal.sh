@@ -61,7 +61,7 @@ function MkInitrd {
 #============================
 function YumClean() {
   echo "Cleanning yum ..." >&2
-  yum clean all --installroot=$ROOTDISK
+  yum clean all --enamblerepo=* --installroot=$ROOTDISK
   rm -fr $ROOTDISK/var/cache/yum
 }
 
@@ -73,7 +73,7 @@ function ReduceDiskSpace () {
   echo "Reducing Disk space "
   echo "===================================="
   
-  [[ -e $DISK_PATH/diskless.var.lib.rpm.tgz ]] && echo "Removing old TAR : $DISK_PATH/diskless.var.lib.rpm.tgz" && rm -f $DISK_PATH/diskless.var.lib.rpm.tgz
+  [[ -e $SCRITP_DIR/diskless.var.lib.rpm.tgz ]] && echo "Removing old TAR : $DISK_PATH/diskless.var.lib.rpm.tgz" && rm -f $DISK_PATH/diskless.var.lib.rpm.tgz
   
   cd $ROOTDISK
   BAK_LIST="var/lib/rpm var/lib/yum usr/share/man usr/share/doc boot/ usr/lib/firmware"
@@ -120,10 +120,15 @@ function InstallSystem () {
      #~ vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
   #~ yum -y remove --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK "kernel-3*"
   
+  #~ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
+     #~ basesystem filesystem bash passwd \
+     #~ dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
+     #~ vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
+  
   yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      basesystem filesystem bash passwd \
-     dhclient openssh-server openssh-clients nfs-utils yum polkit ipa-client\
-     vim-minimal util-linux shadow-utils kernel-lt net-tools cronie-anacron 
+     dhclient openssh-server openssh-clients nfs-utils yum polkit\
+     util-linux kernel-lt net-tools
   
   
   # Configuring yum 
@@ -174,7 +179,7 @@ function Restore(){
   echo "Restoring from $SCRITP_DIR/diskless.full.tgz ..... "
   echo "===================================="
   cd $ROOTDISK
-  tar -I pigz -xf $SCRITP_DIR/diskless.full.tgz 
+  tar -I pigz -xf $SCRITP_DIR/diskless.full.`date +%Y-%m-%d`.tgz 
   cd -
 }
 
