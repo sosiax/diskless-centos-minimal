@@ -113,9 +113,67 @@ function InstallSystem () {
   echo "Installing system ..... "
   echo "===================================="
   
-  yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
+  #~ yum group -y install --releasever=/ --installroot=$ROOTDISK "Instalación mínima" 
   yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK \
-     kernel-lt 
+     kernel-lt \
+     audit                 \
+     basesystem            \
+     bash                  \
+     biosdevname           \
+     btrfs-progs           \
+     coreutils             \
+     cronie                \
+     curl                  \
+     dhclient              \
+     dracut-config-rescue  \
+     e2fsprogs             \
+     filesystem            \
+     firewalld             \
+     glibc                 \
+     hostname              \
+     initscripts           \
+     iproute               \
+     iprutils              \
+     iptables              \
+     iputils               \
+     irqbalance            \
+     ivtv-firmware         \
+     kbd                   \
+     kernel-tools          \
+     kexec-tools           \
+     less                  \
+     libsysfs              \
+     linux-firmware        \
+     lshw                  \
+     man-db                \
+     microcode_ctl         \
+     ncurses               \
+     NetworkManager        \
+     NetworkManager-team   \
+     NetworkManager-tui    \
+     openssh-clients       \
+     openssh-server        \
+     parted                \
+     passwd                \
+     plymouth              \
+     policycoreutils       \
+     procps-ng             \
+     rootfiles             \
+     rpm                   \
+     rsyslog               \
+     selinux-policy-targeted \
+     setup                 \
+     sg3_utils             \
+     sg3_utils-libs        \
+     shadow-utils          \
+     sudo                  \
+     systemd               \
+     tar                   \
+     tuned                 \
+     util-linux            \
+     vim-minimal           \
+     xfsprogs              \
+     yum                   \
   #cp /etc/yum.repos.d/elrepo.repo $ROOTDISK/etc/yum.repos.d/elrepo.repo
   #~ yum -y install --releasever=/ --enablerepo=elrepo-kernel --installroot=$ROOTDISK  \
      #~ basesystem filesystem bash passwd \
