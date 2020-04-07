@@ -71,10 +71,10 @@ done
 #======================
 # look for fscache LABEL
 #======================
-read -a cachedir <<<`grep 'dir ' /etc/cachefilesd.conf`
-if [ ! -z ${cachedir[1]} ]
+read -r a cachedir <<<`grep 'dir ' /etc/cachefilesd.conf`
+if [ ! -z ${cachedir} ]
 then
-  FSCACHEDIR=${cachedir[1]}
+  FSCACHEDIR=${cachedir}
   mkdir -p $FSCACHEDIR
   mount  LABEL=fscache $cache_dev $FSCACHEDIR || \
     mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs $FSCACHEDIR || \
@@ -110,4 +110,11 @@ sleep 2
 
 telini 3
 
-ipa-client-install --force-join --principal admin@ICMAT.ES -w AdminIPA19 --unattended
+# Setting up IB
+podprobe ib_ipoib
+dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
+ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
+[[ ! -z $ip ]] && [[ ! -z $dev ]] && ip address add $ip/24 dev $dev 
+
+
+ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended
