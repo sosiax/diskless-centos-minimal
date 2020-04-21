@@ -114,7 +114,7 @@ telini 3
 # Setting up IB
 modprobe ib_ipoib
 
-sleep 1
+sleep 5
 
 dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
 ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
