@@ -103,6 +103,7 @@ sh /opt/icmat/sbin/build-login-files.sh merge
 rsync -raAv /opt/icmat/config/odisea/ /
 cd -
 
+touch /var/log/lastlog
 
 loadkeys es
 
@@ -111,7 +112,7 @@ sleep 2
 telini 3
 
 # Setting up IB
-podprobe ib_ipoib
+modprobe ib_ipoib
 dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
 ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
 [[ ! -z $ip ]] && [[ ! -z $dev ]] && ip address add $ip/24 dev $dev 
