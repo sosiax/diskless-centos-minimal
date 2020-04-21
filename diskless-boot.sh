@@ -78,9 +78,10 @@ done
 read -r a FSCACHEDIR <<<`grep 'dir ' /etc/cachefilesd.conf`
 [ -z ${FSCACHEDIR} ] && FSCACHEDIR=/var/cache/fscache
 mkdir -p $FSCACHEDIR
-mount  LABEL=fscache $FSCACHEDIR || \
-  mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs $FSCACHEDIR || \
-    fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs: $FSCACHEDIR"
+mount -o remount LABEL=fscache &> /dev/null ||  \
+  mount  LABEL=fscache $FSCACHEDIR || \
+    mount -t tmpfs -o size=$((`free | grep Mem | awk '{ print $2 }'`/10))K tmpfs $FSCACHEDIR || \
+      fail "ERROR: could not create a temporary filesystem to mount the base filesystems for overlayfs: $FSCACHEDIR"
 service cachefilesd restart 
 for dir in `mount | grep 'type nfs' | awk '{print $3}'`
 do
@@ -90,8 +91,9 @@ done
 # look for scratch LABEL
 #======================
 mkdir -p /scratch
-mount  LABEL=scratch /scratch || \
-   fail "ERROR: could not scratch "  
+mount -o remount LABEL=scratch &> /dev/null ||  \
+  mount  LABEL=scratch /scratch || \
+    fail "ERROR: could not scratch "  
    
 # Check IP is 192.168.x.x
 ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient
