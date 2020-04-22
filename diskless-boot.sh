@@ -129,6 +129,8 @@ dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
 ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
 [[ ! -z $ip ]] && [[ ! -z $dev ]] && ip address add $ip/24 dev $dev 
 
+timedatectl set-timezone Europe/Madrid
+
 ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
 ipa-client-install --unistall --unattended --force
 ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
