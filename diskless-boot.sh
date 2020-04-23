@@ -129,7 +129,16 @@ dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
 ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
 [[ ! -z $ip ]] && [[ ! -z $dev ]] && ip address add $ip/24 dev $dev 
 
+# Setting time zone
 timedatectl set-timezone Europe/Madrid
+
+# Adding Ganglia user
+echo 'ganglia:x:989:985:Ganglia Monitoring System:/var/lib/ganglia:/sbin/nologin' >> /etc/passwd
+echo 'ganglia:!!:18278::::::' >> /etc/shadow
+echo 'ganglia:x:985:' >> /etc/group
+echo 'ganglia:!::' >> /etc/gshadow
+
+/bin/systemctl start gmond.service
 
 ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
 ipa-client-install --unistall --unattended --force
