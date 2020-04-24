@@ -33,8 +33,16 @@ initializeFS(){
 } 
 
 fail(){
-  echo -e "$1"
+  echo -e "ERROR: $1"
   exit 1
+}
+
+warning(){
+  echo -e "WARNING: $1"
+}
+
+info(){
+  echo -e "INFO: $1"
 }
 
 # load module
@@ -72,6 +80,15 @@ do
   fi
 done
 
+   
+# Check IP is 192.168.x.x
+ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient && sleep 1 && ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255`
+[ -z $ip ] && fail "No IP"
+
+# Lustre mount - already in fstab
+
+mount -a 
+
 #======================
 # look for fscache LABEL
 #======================
@@ -87,20 +104,15 @@ for dir in `mount | grep 'type nfs' | awk '{print $3}'`
 do
   mount -o remount $dir
 done
+
 #======================
 # look for scratch LABEL
 #======================
 mkdir -p /scratch
 mount -o remount LABEL=scratch &> /dev/null ||  \
   mount  LABEL=scratch /scratch || \
-    fail "ERROR: could not scratch "  
-   
-# Check IP is 192.168.x.x
-ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` || dhclient
-
-# Lustre mount - already in fstab
-
-mount -a 
+    warning "ERROR: could not mount scratch partition"  
+    
 for i in `mount | grep 'type nfs' | awk '{ print $3}'`
 do 
    mount -o remount $i
