@@ -157,6 +157,7 @@ echo 'ganglia:x:985:' >> /etc/group
 echo 'ganglia:!::' >> /etc/gshadow
 
 info "Running gmond"
+/bin/systemctl enable gmond.service
 /bin/systemctl start gmond.service
 
 info "Running IPA client"
@@ -166,6 +167,10 @@ ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrol
 info "Creating scratch dirs"
 sh /opt/icmat/bin/scratch-init.sh
 
-/etc/init.d/sgeexecd.p6444 start
+info "Setting up and running SGE daemon"
+chkconfig --add sgeexecd.p6444
+chkconfig --level 3,4,5 sgeexecd.p6444 on
 
+sleep 3
 
+systemctl isolate multi-user.target

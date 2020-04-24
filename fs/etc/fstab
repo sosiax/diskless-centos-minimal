@@ -4,10 +4,10 @@ tmpfs                     /dev/shm               tmpfs   defaults   0 0
 sysfs                     /sys                   sysfs   defaults   0 0
 proc                      /proc                  proc    defaults   0 0
 
-LABEL=scratch             /scratch               auto    defaults   0 0
-LABEL=fscache             /var/cache/fscache     auto    defaults   0 0
+LABEL=scratch             /scratch               auto    defaults   0 1
+LABEL=fscache             /var/cache/fscache     auto    defaults   0 1
 
-ada.icmat.es:/var/lib/diskless/centos7/usr  /usr  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    0 2
+ada.icmat.es:/var/lib/diskless/centos7/usr  /usr  nfs        ro,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=usr    0 0
 
-nfs-lustre.icmat.es:/     /LUSTRE                nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 0 2
+nfs-lustre.icmat.es:/     /LUSTRE                nfs     rw,hard,intr,rsize=8192,wsize=8192,timeo=14,nosharecache,fsc=lustre 0 0
 /LUSTRE/users             /home                  none    defaults,bind 0 0
