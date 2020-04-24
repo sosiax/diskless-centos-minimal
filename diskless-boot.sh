@@ -86,12 +86,13 @@ ip=`ip add | grep -ohE "192.168.([0-9]{1,3}[\.]){1}[0-9]{1,3}" | grep -v 255` ||
 [ -z $ip ] && fail "No IP"
 
 # Lustre mount - already in fstab
-
+info "Mounting all filesystems"
 mount -a 
 
 #======================
 # look for fscache LABEL
 #======================
+info "Checking FSCACHE"
 read -r a FSCACHEDIR <<<`grep 'dir ' /etc/cachefilesd.conf`
 [ -z ${FSCACHEDIR} ] && FSCACHEDIR=/var/cache/fscache
 mkdir -p $FSCACHEDIR
@@ -108,6 +109,7 @@ done
 #======================
 # look for scratch LABEL
 #======================
+info "Checking SCRATCH"
 mkdir -p /scratch
 mount -o remount LABEL=scratch &> /dev/null ||  \
   mount  LABEL=scratch /scratch || \
@@ -118,6 +120,8 @@ do
    mount -o remount $i
 done
 
+# Setting up /etc
+info "Setting up /etc"
 cd /
 tar xzf /usr/share/icmat/node-etc.tgz
 sh /opt/icmat/sbin/build-login-files.sh merge
@@ -130,28 +134,35 @@ loadkeys es
 
 sleep 1
 
-telinit 3
+#telinit 3
 
 # Setting up IB
 modprobe ib_ipoib
-
 sleep 5
-
+info "Configuring IB"
 dev=$(ip link show | grep ib | grep 'state UP' | cut -d ':' -f2 | tr ' ' '\0')
 ip=$(grep  `hostname -s`-ib /opt/icmat/config/common/etc/hosts.d/hosts.reference | cut -d ' ' -f1)
 [[ ! -z $ip ]] && [[ ! -z $dev ]] && ip address add $ip/24 dev $dev 
+if [ -z $ip ]; then warning "No IPoIB"; else info "IPoIB: $ip"; fi
 
 # Setting time zone
+info "Setting Zone Europe/Madrid"
 timedatectl set-timezone Europe/Madrid
 
 # Adding Ganglia user
+info "Configuring ganglia user"
 echo 'ganglia:x:989:985:Ganglia Monitoring System:/var/lib/ganglia:/sbin/nologin' >> /etc/passwd
 echo 'ganglia:!!:18278::::::' >> /etc/shadow
 echo 'ganglia:x:985:' >> /etc/group
 echo 'ganglia:!::' >> /etc/gshadow
 
+info "Running gmond"
 /bin/systemctl start gmond.service
 
-ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
-ipa-client-install --unistall --unattended --force
-ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
+info "Running IPA client"
+ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force 
+#|| ipa-client-install --uninstall --unattended --force && ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrolluser --unattended --force
+
+info "Creating scratch dirs"
+sh /opt/icmat/bin/scratch-init.sh
+
