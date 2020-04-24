@@ -166,3 +166,6 @@ ipa-client-install --force-join --principal hostenrolluser@ICMAT.ES -w hostenrol
 info "Creating scratch dirs"
 sh /opt/icmat/bin/scratch-init.sh
 
+/etc/init.d/sgeexecd.p6444 start
+
+
