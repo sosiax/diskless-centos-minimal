@@ -187,8 +187,8 @@ cd -
 
 sleep 3
 
-systemctl isolate multi-user.target
+#systemctl isolate multi-user.target
 
-sleep 5 
+#sleep 5 
 
 [ -e /run/nologin ] && rm -fr /run/nologin
