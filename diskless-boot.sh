@@ -171,6 +171,7 @@ info "Setting up and running SGE daemon"
 chkconfig --add sgeexecd.p6444
 chkconfig --level 3,4,5 sgeexecd.p6444 on
 
+systemctl daemon-reload
 sleep 3
 
 systemctl isolate multi-user.target
