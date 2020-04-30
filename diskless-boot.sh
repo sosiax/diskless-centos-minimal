@@ -169,7 +169,7 @@ sh /opt/icmat/bin/scratch-init.sh
 
 info "Setting up and running SGE daemon"
 [ -z "$TERM" ] && export TERM=xterm
-service sgeexecd.p6444 softstop 
+service sgeexecd softstop 
 sge_file=/etc/rc.d/init.d/sgeexecd.p6444
 rm -fr $sge_file || warning "File /etc/init.d/sgeexecd.p6444 Cannot be removed!!"
 ls $sge_file && warning "File /etc/init.d/sgeexecd.p6444 do exist!!"
@@ -177,8 +177,10 @@ cd /LUSTRE/apps/oge/
 ./install_execd < install-node.input
 cd -
 
-#chkconfig --add sgeexecd.p6444
-#chkconfig --level 345 sgeexecd.p6444 on
+rsync -raAv /opt/icmat/config/odisea/ /
+chkconfig --add sgeexecd
+chkconfig --level 345 sgeexecd on
+service sgeexecd start
 
 #systemctl daemon-reload
 #service sgeexecd.p6444 softstop
