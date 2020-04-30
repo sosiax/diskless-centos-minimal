@@ -168,20 +168,25 @@ info "Creating scratch dirs"
 sh /opt/icmat/bin/scratch-init.sh
 
 info "Setting up and running SGE daemon"
-chkconfig --add sgeexecd.p6444
-chkconfig --level 3,4,5 sgeexecd.p6444 on
-service sgeexecd.p6444 stop
+[ -z "$TERM" ] && export TERM=xterm
+service sgeexecd.p6444 softstop
 cd /LUSTRE/apps/oge/
 ./install_execd < intall-diskless-node.input
 cd -
 
+chkconfig --add sgeexecd.p6444
+chkconfig --level 3,4,5 sgeexecd.p6444 on
+
 systemctl daemon-reload
+service sgeexecd.p6444 softstop
+sleep 1
+service sgeexecd.p6444 start
+service sgeexecd.p6444 status
+
 sleep 3
 
 systemctl isolate multi-user.target
 
 sleep 5 
-
-
 
 [ -e /run/nologin ] && rm -fr /run/nologin
