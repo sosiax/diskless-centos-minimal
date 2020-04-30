@@ -174,3 +174,6 @@ chkconfig --level 3,4,5 sgeexecd.p6444 on
 sleep 3
 
 systemctl isolate multi-user.target
+
+sleep 5 
+[ -e /run/nologin ] && rm -fr /run/nologin
