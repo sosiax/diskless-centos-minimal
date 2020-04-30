@@ -177,13 +177,13 @@ cd /LUSTRE/apps/oge/
 ./install_execd < install-node.input
 cd -
 
-chkconfig --add sgeexecd.p6444
-chkconfig --level 345 sgeexecd.p6444 on
+#chkconfig --add sgeexecd.p6444
+#chkconfig --level 345 sgeexecd.p6444 on
 
-systemctl daemon-reload
-service sgeexecd.p6444 softstop
-sleep 1
-service sgeexecd.p6444 start
+#systemctl daemon-reload
+#service sgeexecd.p6444 softstop
+#sleep 1
+#service sgeexecd.p6444 start
 
 sleep 3
 
