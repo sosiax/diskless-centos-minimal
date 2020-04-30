@@ -169,19 +169,19 @@ sh /opt/icmat/bin/scratch-init.sh
 
 info "Setting up and running SGE daemon"
 [ -z "$TERM" ] && export TERM=xterm
-service sgeexecd.p6444 softstop
+service sgeexecd.p6444 softstop 
+rm -fr /etc/init.d/sgeexecd.p6444 
 cd /LUSTRE/apps/oge/
-./install_execd < intall-diskless-node.input
+./install_execd < install-node.input
 cd -
 
 chkconfig --add sgeexecd.p6444
-chkconfig --level 3,4,5 sgeexecd.p6444 on
+chkconfig --level 345 sgeexecd.p6444 on
 
 systemctl daemon-reload
 service sgeexecd.p6444 softstop
 sleep 1
 service sgeexecd.p6444 start
-service sgeexecd.p6444 status
 
 sleep 3
 
