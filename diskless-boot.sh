@@ -170,7 +170,8 @@ sh /opt/icmat/bin/scratch-init.sh
 info "Setting up and running SGE daemon"
 [ -z "$TERM" ] && export TERM=xterm
 service sgeexecd.p6444 softstop 
-rm -fr /etc/init.d/sgeexecd.p6444 
+rm -fr /etc/init.d/sgeexecd.p6444 || warning "File /etc/init.d/sgeexecd.p6444 Cannot be removed!!"
+ls /etc/init.d/sgeexecd.p6444 && warning "File /etc/init.d/sgeexecd.p6444 do exist!!"
 cd /LUSTRE/apps/oge/
 ./install_execd < install-node.input
 cd -
