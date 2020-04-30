@@ -190,5 +190,6 @@ sleep 3
 #systemctl isolate multi-user.target
 
 #sleep 5 
-
+info "Removing possible /run/nologin"
 [ -e /run/nologin ] && rm -fr /run/nologin
+info "Execution success"
