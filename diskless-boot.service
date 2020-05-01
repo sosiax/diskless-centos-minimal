@@ -1,6 +1,7 @@
 [Unit]
 Description = making network connection up
-After = network.target
+Requires=network.target
+RemainAfterExit=yes
 
 [Service]
 ExecStart = /root/diskless-boot.sh
