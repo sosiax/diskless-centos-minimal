@@ -1,6 +1,7 @@
 [Unit]
-Description = making network connection up
+Description = Setting up Diskless Comp Node
 Requires=network.target
+After=rsyslog.service syslog.target network.target network-online.target auditd.service systemd-journald.socket basic.target system.slice
 RemainAfterExit=yes
 
 [Service]
